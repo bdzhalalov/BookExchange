@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  nginx:
+    container_name: book_exchange-nginx
+    build:
+      context: docker
+      dockerfile: nginx/Dockerfile
+    volumes:
+      - ./:/var/www/app
+    ports:
+      - "8080:80"
+    networks:
+      - book_exchange_network
+
+  app:
+    container_name: book_exchange-app
+    build:
+      context: docker
+      dockerfile: php/Dockerfile
+    volumes:
+      - ./:/var/www/app
+    depends_on:
+      - db
+    networks:
+      - book_exchange_network
+
+  db:
+    container_name: book_exchange-db
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: book_exchange
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - book_exchange_network
+
+volumes:
+  postgres-data:
+    driver: local
+networks:
+  book_exchange_network:
+    driver: bridge
