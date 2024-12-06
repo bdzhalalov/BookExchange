@@ -33,7 +33,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: book_exchange
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
