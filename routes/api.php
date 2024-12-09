@@ -14,3 +14,11 @@ Route::prefix('books')->group( function () {
         Route::delete('/', [BookController::class, 'delete'])->name('books.delete');
     });
 });
+
+// CRUD operations with book requests
+Route::prefix('requests')->group( function () {
+    Route::get('/', [BookRequestController::class, 'list']);
+    Route::post('/', [BookRequestController::class, 'create']);
+    Route::patch('/{request}/approve', [BookRequestController::class, 'approve']);
+    Route::patch('/{request}/reject', [BookRequestController::class, 'reject']);
+});

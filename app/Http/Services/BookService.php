@@ -6,9 +6,7 @@ use App\Exceptions\NotFoundException;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection as Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Spatie\FlareClient\Http\Exceptions\NotFound;
 
 class BookService
 {
