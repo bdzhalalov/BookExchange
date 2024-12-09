@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookRequestController;
+use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // CRUD operations with books
@@ -21,4 +23,12 @@ Route::prefix('requests')->group( function () {
     Route::post('/', [BookRequestController::class, 'create']);
     Route::patch('/{request}/approve', [BookRequestController::class, 'approve']);
     Route::patch('/{request}/reject', [BookRequestController::class, 'reject']);
+});
+
+// Notifications
+Route::prefix('notifications')->group( function () {
+    Route::get('/', function () {
+        return Auth::user()->unreadNotifications;
+    });
+    Route::patch('/{id}/read', [NotificationController::class, 'markAsRead']);
 });
