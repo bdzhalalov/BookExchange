@@ -51,6 +51,15 @@ services:
     networks:
       - book_exchange_network
 
+  artisan:
+    container_name: artisan
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - ./:/var/www/app
+    entrypoint: ['php', '/var/www/app/artisan']
+
 volumes:
   postgres-data:
     driver: local
