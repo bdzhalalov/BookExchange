@@ -1,66 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# BookExchange 
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**BookExchange** is a web application that enables users to list books they own and exchange them with others. The application includes user authentication, book management, exchange requests, and notifications to streamline the book-swapping process.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Core Functionalities
+1. **User Management**
+   - User authentication using Laravel Breeze.
+   - User profiles with name, email, location, and avatar.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+2. **Books Module**
+   - Users can:
+     - Add books with title, author, genre, condition, and cover image.
+     - Edit or delete their books.
+     - Search or filter books by title, author, or genre.
 
-## Learning Laravel
+3. **Book Exchange Requests**
+   - Users can:
+     - Request a book from another user.
+     - Manage incoming requests (approve/reject).
+   - Request statuses: Pending, Approved, Rejected.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+4. **Notifications**
+   - Users are notified about request status changes.
+   - Example:
+     - "Your exchange request for *Book Title* has been approved."
+     - "Your exchange request for *Book Title* has been rejected."
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Getting Started
 
-## Laravel Sponsors
+### Prerequisites
+- **Docker** with Docker Compose
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Start up project
 
-### Premium Partners
+- Go to directory with cloned project
+- Use command `make build`
+- Then use command `make start`
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+#### For subsequent launches of the application, it is enough to use the command `make run`
 
-## Contributing
+## Testing
+- use command `make test` to run all project test
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Database Explanation
 
-## Code of Conduct
+The **BookExchange** project uses a relational database model. Below is a detailed explanation of the database schema and the relationships between tables:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+### 1. **Users Table**
+The `users` table stores information about the registered users of the system.  
+- **Key Fields**:
+  - `id`: Primary key, unique identifier for each user.
+  - `name`: Name of the user.
+  - `email`: Email address of the user (used for login).
+  - `location`: User's location (optional).
+  - `avatar`: URL to the user's avatar image (optional).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Relationships**:
+  - A user can have many books (`One-to-Many` relationship).
+  - A user can make many book exchange requests (`One-to-Many` relationship with `requests`).
+  - A user can receive notifications (`One-to-Many` relationship with `notifications`).
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. **Books Table**
+The `books` table stores details of books added by users for exchange.  
+- **Key Fields**:
+  - `id`: Primary key, unique identifier for each book.
+  - `user_id`: Foreign key referencing the owner of the book (from `users` table).
+  - `title`: Title of the book.
+  - `author`: Author of the book.
+  - `genre`: Genre of the book.
+  - `condition`: Description of the book's condition (e.g., "New", "Used").
+  - `cover_image`: URL to the book's cover image.
+
+- **Relationships**:
+  - A book belongs to a user (`Many-to-One` relationship with `users`).
+  - A book can have multiple exchange requests (`One-to-Many` relationship with `requests`).
+
+---
+
+### 3. **Book Requests Table**
+The `requests` table handles the logic of requesting an exchange for books.  
+- **Key Fields**:
+  - `id`: Primary key, unique identifier for each request.
+  - `book_id`: Foreign key referencing the requested book (from `books` table).
+  - `user_id`: Foreign key referencing the user making the request (from `users` table).
+  - `status`: Status of the request (values: `Pending`, `Approved`, `Rejected`).
+
+- **Relationships**:
+  - A book request is linked to a specific book (`Many-to-One` relationship with `books`).
+  - A book request is made by a specific user (`Many-to-One` relationship with `users`).
+  - A book request is managed by the book's owner (via `books.user_id`).
+
+---
+
+## TODOS
+- TODOs left in the project code
+- Add swagger documentation for api routes
+- Start using api auth throught api-token
