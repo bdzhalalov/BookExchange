@@ -59,6 +59,8 @@ services:
     volumes:
       - ./:/var/www/app
     entrypoint: ['php', '/var/www/app/artisan']
+    networks:
+      - book_exchange_network
 
 volumes:
   postgres-data:
