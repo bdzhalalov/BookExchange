@@ -13,5 +13,8 @@ run:
 	sleep 1
 	docker-compose ps
 
+test:
+	docker-compose run artisan test
+
 stop:
 	docker-compose stop
