@@ -13,7 +13,13 @@ class ApiTestCase extends TestCase
 
     protected $user;
 
+    protected $anotherUser;
+
     protected $books;
+
+    protected $booksForAnotherUser;
+
+    protected $createdBook;
 
     public function setUp(): void
     {
@@ -21,6 +27,15 @@ class ApiTestCase extends TestCase
         $this->artisan('migrate');
 
         $this->user = User::factory()->unverified()->create();
+        $this->anotherUser = User::factory()->unverified()->create();
         $this->books = Book::factory(5)->for($this->user)->create();
+        $this->booksByAnotherUser = Book::factory(5)->for($this->anotherUser)->create();
+        $this->createdBook = [
+            "title" => "Test book",
+            "author" => "Testson Tester",
+            "genre" => "Testing",
+            "condition" => "New",
+            "user_id" => $this->user->id,
+        ];
     }
 }
