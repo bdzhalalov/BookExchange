@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection as Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Mockery\Exception;
 
 class BookController extends Controller
@@ -68,10 +69,12 @@ class BookController extends Controller
             $data['cover_image'] = $coverImagePath;
             $data['user_id'] = Auth::id();
 
-            return $this->bookService->createBook($data);
+            return response()->json($this->bookService->createBook($data), 201);
+        } catch (ValidationException $exception) {
+            return response()->json($exception->getMessage(), 422);
         } catch (\Exception $exception) {
             Log::error(
-                "Error while updating book",
+                "Error while creating book",
                 ['exception' => $exception],
             );
 
@@ -129,6 +132,8 @@ class BookController extends Controller
             return $this->bookService->updateBookById($bookId, $data);
         } catch (NotFoundException $exception) {
             return response()->json($exception->getMessage(), 404);
+        } catch (ValidationException $exception) {
+            return response()->json($exception->getMessage(), 422);
         } catch (\Exception $exception) {
             Log::error(
                 "Error while updating book",
